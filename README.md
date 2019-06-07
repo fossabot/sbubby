@@ -1,4 +1,4 @@
-# Influence Functions for Keras models**
+# Influence Functions for Keras models
 > A Keras-compatible implementation of "Understanding Black-box Predictions via Influence Functions": https://arxiv.org/abs/1703.04730
 
 This repository is an open source toolkit to understand deep learning models better. Deep learning is often referred as a black-box that is difficult to understand.
