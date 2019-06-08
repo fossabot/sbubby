@@ -11,7 +11,7 @@ Here, we provide functions to analyze deep learning model decisions easily appli
 Influence score can be useful to understand the model through training samples. The score can be used for filtering bad training samples that affects test performance negatively. 
 It is useful to prioritize potential mislabeled examples to be fixed, and debug distribution mismatch between train and test samples.
 
-## Demo 
+## Demo
 - _Coming soon_
 
 ## Dependencies
@@ -20,11 +20,11 @@ It is useful to prioritize potential mislabeled examples to be fixed, and debug 
 ## Installation
 Install alone
 ```bash
-git clone https://github.com/matthew-mcateer/influence_functions
+git clone https://github.com/matthew-mcateer/influence_functions.git
 ```
 
 ## Examples 
-- _Coming soon_
+- [influence_functions](https://github.com/matthew-mcateer/influence_functions/examples)
 
 ## API Documentation
 - _Coming soon_
