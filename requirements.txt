@@ -1,0 +1,4 @@
+numpy
+six
+opencv-python
+scikit-image
