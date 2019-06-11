@@ -139,22 +139,17 @@ def main(model_filename, data):
         approx_params['recursion_batch_size'],
         approx_params['recursion_depth']))
     plt.savefig('pos_neg.png', dpi=1000)
-    plt.show()
     
     influence_results = pd.DataFrame(
-        data=np.transpose(
-            np.stack(
-            target_idx += 1
-
-    fig, axes1 = plt.subplots(2, 5, figsize=(15, 5))
-    target_idx = 0
-                [scores[sorted_indices],
-                 [i.astype(int) for i in sorted_indices],
-                 [i.astype(int) for i in feeder.train_origin_label[sorted_indices]],
-                 np.arange(len(scores),0,-1),
-                 np.arange(1,len(scores)+1,1)
-                ])),
-        columns=["score", "index", "label", "pos_rank", "neg_rank"])
+    data=np.transpose(
+        np.stack(
+            [scores[sorted_indices],
+             [i.astype(int) for i in sorted_indices],
+             [i.astype(int) for i in feeder.train_origin_label[sorted_indices]],
+             np.arange(len(scores),0,-1),
+             np.arange(1,len(scores)+1,1)
+            ])),
+    columns=["score", "index", "label", "pos_rank", "neg_rank"])
     
     influence_results.to_csv('{}_influence_results_{}.csv'.format(model_filename, finishing_time))
 
