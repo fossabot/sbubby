@@ -109,7 +109,7 @@ class InfluenceFeeder:
 
 class MNISTFeeder(InfluenceFeeder):
     def __init__(self):
-        (x_train, y_train), (x_test, y_test) = mnist.load_data() 
+        (train_data, train_label), (test_data, test_label) = mnist.load_data() 
         num_classes = 10
         # input image dimensions
         img_rows, img_cols = 28, 28
@@ -152,7 +152,7 @@ class MNISTFeeder(InfluenceFeeder):
 
 class FashionMNISTFeeder(InfluenceFeeder):
     def __init__(self):
-        (x_train, y_train), (x_test, y_test) = fashion_mnist.load_data() 
+        (train_data, train_label), (test_data, test_label) = fashion_mnist.load_data() 
         num_classes = 10
         # input image dimensions
         img_rows, img_cols = 28, 28
