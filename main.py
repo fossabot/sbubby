@@ -117,26 +117,6 @@ def main(model_filename, data):
     for idx in helpful:
         print('[{}] {}'.format(idx, scores[idx]))
 
-    fig, axes1 = plt.subplots(2, 5, figsize=(15, 5))
-    target_idx = 0
-    for j in range(2):
-        for k in range(5):
-            idx = helpful[target_idx]
-            axes1[j][k].set_axis_off()
-            axes1[j][k].imshow(feeder.train_origin_data[idx])
-            label_str = int(feeder.train_origin_label[idx])
-            axes1[j][k].set_title('[{}]: {}'.format(idx, label_str))
-
-    for j in range(2):
-        for k in range(5):
-            idx = harmful[target_idx]
-            axes1[j][k].set_axis_off()
-            axes1[j][k].imshow(feeder.train_origin_data[idx])
-            label_str = int(feeder.train_origin_label[idx])
-            axes1[j][k].set_title('[{}]: {}'.format(idx, label_str))
-
-            target_idx += 1
-
     pos_signal = scores[sorted_indices].copy()
     neg_signal = scores[sorted_indices].copy()
 
@@ -187,6 +167,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     main(args.model_name, args.train_data)
-
-
-
