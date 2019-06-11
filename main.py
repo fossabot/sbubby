@@ -31,6 +31,7 @@ import tensorflow as tf
 import pandas as pd
 import keras
 import argparse
+import datetime
 from tensorflow.python.ops.gradients_impl import _hessian_vector_product
 import matplotlib.pyplot as plt
 from keras.datasets import mnist
@@ -104,6 +105,7 @@ def main(model_filename, data):
         train_batch_size,
         train_iterations)
     
+    finishing_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
     sorted_indices = np.argsort(scores)
     harmful = sorted_indices[:10]
