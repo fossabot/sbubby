@@ -52,15 +52,15 @@ import os
 import sys
 import torchvision
 import torch.nn as nn
-import dataloader
-import net_plotter
-import plot_2D
-import plot_1D
-import model_loader
-import scheduler
-import projection as proj
-import hess_vec_prod
-from plot_surface import name_surface_file, setup_surface_file
+from . import dataloader
+from . import net_plotter
+from . import plot_2D
+from . import plot_1D
+from . import model_loader
+from . import scheduler
+from . import projection as proj
+from . import hess_vec_prod
+from . import plot_surface
 
 # =============================================================================
 # METHODS
@@ -231,9 +231,9 @@ if __name__ == '__main__':
     if rank == 0:
         net_plotter.setup_direction(args, dir_file, net)
 
-    surf_file = name_surface_file(args, dir_file)
+    surf_file = plot_surface.name_surface_file(args, dir_file)
     if rank == 0:
-        setup_surface_file(args, surf_file, dir_file)
+        plot_surface.setup_surface_file(args, surf_file, dir_file)
 
     # wait until master has setup the direction file and surface file
     mpi4pytorch.barrier(comm)
