@@ -1,4 +1,4 @@
-from . import downloader
+from . import dataloader
 from . import evaluation
 from . import h5_util
 from . import h52vtp
@@ -13,4 +13,4 @@ from . import plot_trajectory
 from . import projection
 from . import scheduler
 
-__all__ = ["downloader","evaluation","h5_util","h52vtp","hess_vec_prod","model_loader","net_plotter","plot_1D","plot_2D","plot_hessian_eigen","plot_surface","plot_trajectory","projection","scheduler"]
+__all__ = ["dataloader","evaluation","h5_util","h52vtp","hess_vec_prod","model_loader","net_plotter","plot_1D","plot_2D","plot_hessian_eigen","plot_surface","plot_trajectory","projection","scheduler"]
