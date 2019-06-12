@@ -49,6 +49,7 @@ from functools import wraps
 import influence_debugger
 from influence_debugger.influence.feeder import MNISTFeeder
 from influence_debugger.influence.influence import Influence
+from influence_debugger.influence.plotter import plot_unranked_influence, plot_ranked_influence
 
 # =============================================================================
 # METHODS
@@ -155,6 +156,9 @@ def main(model_filename, data):
     columns=["score", "index", "label", "pos_rank", "neg_rank"])
     
     influence_results.to_csv('{}_influence_results_{}.csv'.format(model_filename, finishing_time))
+    
+    plot_unranked_influence('{}_influence_results_{}.csv'.format(model_filename, finishing_time))
+    plot_ranked_influence('{}_influence_results_{}.csv'.format(model_filename, finishing_time))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='plotting loss surface')
