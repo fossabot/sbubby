@@ -46,10 +46,10 @@ import hashlib
 import json
 from functools import wraps
 
-import influence_debugger
-from influence_debugger.influence.feeder import MNISTFeeder
-from influence_debugger.influence.influence import Influence
-from influence_debugger.influence.plotter import plot_unranked_influence, plot_ranked_influence
+import sbubby
+from sbubby.influence.feeder import MNISTFeeder
+from sbubby.influence.influence import Influence
+from sbubby.influence.plotter import plot_unranked_influence, plot_ranked_influence
 
 # =============================================================================
 # METHODS
