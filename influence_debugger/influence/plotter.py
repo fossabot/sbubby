@@ -168,7 +168,7 @@ def plot_ranked_influence(csv_filename):
     p.xaxis.axis_label = 'Ranked Index (1=lowest score)'
     p.yaxis.axis_label = 'Influence Score'
 
-    output_file("{}_unranked_influence.html".format(csv_filename))
+    output_file("{}_ranked_influence.html".format(csv_filename))
     save(p)
 
 
