@@ -29,7 +29,7 @@ import numpy as np
 import copy
 from os.path import exists, commonprefix
 import h5py
-from h5_util import write_list, read_list
+from . import h5_util
 import model_loader
 import tensorflow.keras as keras
 import tensorflow as tf
@@ -50,8 +50,7 @@ import torch
 import os
 import copy
 import h5py
-import model_loader
-from . import h5_util
+from . import model_loader
 from sklearn.decomposition import PCA
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import pyplot as plt
