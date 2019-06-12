@@ -33,9 +33,9 @@ import torch
 import os
 import copy
 import h5py
-import net_plotter
-import model_loader
-import h5_util
+from . import net_plotter
+from . import model_loader
+from . import h5_util
 from sklearn.decomposition import PCA
 import keras
 import tensorflow as tf
