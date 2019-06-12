@@ -29,7 +29,7 @@ import numpy as np
 import copy
 from os.path import exists, commonprefix
 import h5py
-import h5_util
+from h5_util import write_list, read_list
 import model_loader
 import tensorflow.keras as keras
 import tensorflow as tf
@@ -213,14 +213,14 @@ def setup_direction(args, dir_file, model):
     if not args.dir_file:
         print("Setting up the plotting directions...")
         xdirection = create_random_direction(model, args.dir_type, args.xignore, args.xnorm)
-        h5_util.write_list(f, 'xdirection', xdirection)
+        write_list(f, 'xdirection', xdirection)
 
         if args.y:
             if args.same_dir:
                 ydirection = xdirection
             else:
                 ydirection = create_random_direction(model, args.dir_type, args.yignore, args.ynorm)
-            h5_util.write_list(f, 'ydirection', ydirection)
+            write_list(f, 'ydirection', ydirection)
 
     f.close()
     print ("direction file created: %s" % dir_file)
@@ -289,10 +289,10 @@ def load_directions(dir_file):
 
     f = h5py.File(dir_file, 'r')
     if 'ydirection' in f.keys():  # If this is a 2D plot
-        xdirection = h5_util.read_list(f, 'xdirection')
-        ydirection = h5_util.read_list(f, 'ydirection')
+        xdirection = read_list(f, 'xdirection')
+        ydirection = read_list(f, 'ydirection')
         directions = [xdirection, ydirection]
     else:
-        directions = [h5_util.read_list(f, 'xdirection')]
+        directions = [read_list(f, 'xdirection')]
 
     return directions
