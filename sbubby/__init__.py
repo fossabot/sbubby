@@ -1,6 +1,19 @@
 from .influence.influence import Influence  # noqa: ignore=F401
 from .influence.influence import InfluenceFeeder  # noqa: ignore=F401
-#from .gradcam.gradcam import Gradcam  # noqa: ignore=F401
-from .landscape import landscape  # noqa: ignore=F401
+from .gradcam.gradcam import Gradcam  # noqa: ignore=F401
+from .landscape import dataloader  # noqa: ignore=F401
+from .landscape import evaluation  # noqa: ignore=F401
+from .landscape import h5_util  # noqa: ignore=F401
+from .landscape import h52vtp  # noqa: ignore=F401
+from .landscape import hess_vec_prod  # noqa: ignore=F401
+from .landscape import model_loader  # noqa: ignore=F401
+from .landscape import net_plotter  # noqa: ignore=F401
+from .landscape import plot_1D  # noqa: ignore=F401
+from .landscape import plot_2D  # noqa: ignore=F401
+from .landscape import plot_hessian_eigen  # noqa: ignore=F401
+from .landscape import plot_surface  # noqa: ignore=F401
+from .landscape import plot_trajectory  # noqa: ignore=F401
+from .landscape import projection  # noqa: ignore=F401
+from .landscape import scheduler  # noqa: ignore=F401
 
 __all__ = ["influence", "gradcam", "landscape"]
