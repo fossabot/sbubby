@@ -211,14 +211,14 @@ def setup_direction(args, dir_file, model):
     if not args.dir_file:
         print("Setting up the plotting directions...")
         xdirection = create_random_direction(model, args.dir_type, args.xignore, args.xnorm)
-        write_list(f, 'xdirection', xdirection)
+        h5_util.write_list(f, 'xdirection', xdirection)
 
         if args.y:
             if args.same_dir:
                 ydirection = xdirection
             else:
                 ydirection = create_random_direction(model, args.dir_type, args.yignore, args.ynorm)
-            write_list(f, 'ydirection', ydirection)
+            h5_util.write_list(f, 'ydirection', ydirection)
 
     f.close()
     print ("direction file created: %s" % dir_file)
@@ -287,10 +287,10 @@ def load_directions(dir_file):
 
     f = h5py.File(dir_file, 'r')
     if 'ydirection' in f.keys():  # If this is a 2D plot
-        xdirection = read_list(f, 'xdirection')
-        ydirection = read_list(f, 'ydirection')
+        xdirection = h5_util.read_list(f, 'xdirection')
+        ydirection = h5_util.read_list(f, 'ydirection')
         directions = [xdirection, ydirection]
     else:
-        directions = [read_list(f, 'xdirection')]
+        directions = [h5_util.read_list(f, 'xdirection')]
 
     return directions
