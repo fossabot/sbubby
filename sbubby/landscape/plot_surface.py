@@ -70,13 +70,12 @@ import torch
 import os
 import copy
 import h5py
-import net_plotter
-import model_loader
-import h5_util
+from . import net_plotter
+from . import model_loader
+from . import h5_util
 from sklearn.decomposition import PCA
 import keras
 import tensorflow as tf
-import numpy as np
 import matplotlib.pyplot as plt
 from keras.datasets import mnist, cifar10, cifar100, fashion_mnist
 from keras.models import Sequential
@@ -88,25 +87,20 @@ from keras import backend as K
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import pyplot as plt
 from matplotlib import cm
-import h5py
 import argparse
-import numpy as np
 from os.path import exists
 import seaborn as sns
 from matplotlib import pyplot as pp
-import h5py
-import argparse
-import numpy as np
 
 import torchvision
 import torch.nn as nn
-import projection as proj
-import net_plotter
-import plot_2D
-import plot_1D
-import evaluation
-import model_loader
-import scheduler
+from . import projection as proj
+from . import net_plotter
+from . import plot_2D
+from . import plot_1D
+from . import evaluation
+from . import model_loader
+from . import scheduler
 
 
 # =============================================================================
