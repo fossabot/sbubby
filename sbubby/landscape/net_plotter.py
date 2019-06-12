@@ -51,7 +51,7 @@ import os
 import copy
 import h5py
 import model_loader
-import h5_util
+from . import h5_util
 from sklearn.decomposition import PCA
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import pyplot as plt
