@@ -46,7 +46,7 @@ from keras.models import load_model
 from keras import backend as K
 from . import model_loader
 from . import net_plotter
-from projection import setup_PCA_directions, project_trajectory
+from . import projection
 from . import plot_2D
 
 # =============================================================================
