@@ -44,10 +44,10 @@ from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 from keras.models import load_model
 from keras import backend as K
-import model_loader
-import net_plotter
+from . import model_loader
+from . import net_plotter
 from projection import setup_PCA_directions, project_trajectory
-import plot_2D
+from . import plot_2D
 
 # =============================================================================
 # MAIN METHOD AND TESTING AREA
@@ -88,9 +88,12 @@ if __name__ == '__main__':
     if args.dir_file:
         dir_file = args.dir_file
     else:
-        dir_file = setup_PCA_directions(args, model_files, w, s)
+        dir_file = projection.setup_PCA_directions(args, model_files, w, s)
 
     # projection trajectory to given directions
-    proj_file = project_trajectory(dir_file, w, s, args.dataset, args.model,
-                                model_files, args.dir_type, 'cos')
+    proj_file = projection.project_trajectory(dir_file, 
+                                              w, s, 
+                                              args.dataset, 
+                                              args.model,
+                                              model_files, args.dir_type, 'cos')
     plot_2D.plot_trajectory(proj_file, dir_file)
