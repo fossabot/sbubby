@@ -69,9 +69,9 @@ import torch
 import os
 import copy
 import h5py
-import net_plotter
-import model_loader
-import h5_util
+from sbubby.landscape import net_plotter
+from sbubby.landscape import model_loader
+from sbubby.landscape import h5_util
 from sklearn.decomposition import PCA
 import keras
 import tensorflow as tf
@@ -99,13 +99,13 @@ import numpy as np
 
 import torchvision
 import torch.nn as nn
-import projection as proj
-import net_plotter
-import plot_2D
-import plot_1D
-import evaluation
-import model_loader
-import scheduler
+from sbubby.landscape import projection as proj
+from sbubby.landscape import net_plotter
+from sbubby.landscape import plot_2D
+from sbubby.landscape import plot_1D
+from sbubby.landscape import evaluation
+from sbubby.landscape import model_loader
+from sbubby.landscape import scheduler
 
 
 # =============================================================================
