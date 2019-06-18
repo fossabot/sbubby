@@ -60,11 +60,23 @@ from sbubby.influence.plotter import plot_unranked_influence, plot_ranked_influe
 # =============================================================================
 # MAIN METHOD AND TESTING AREA
 # =============================================================================
-def main(model_filename, data):
+def main(model_filename, dataset, train_data, train_labels, test_data, test_labels):
     """Description of main()"""
     model = load_model(model_filename)
     
-    if data == 'mnist':
+    if dataset == 'mnist':
+        feeder = MNISTFeeder()
+    if dataset == 'cifar10':
+        feeder = MNISTFeeder()
+    if dataset == 'cifar100':
+        feeder = MNISTFeeder()
+    if dataset == 'fashion_mnist':
+        feeder = MNISTFeeder()
+    if dataset == 'qmnist':
+        feeder = MNISTFeeder()
+    if dataset == 'padova':
+        feeder = MNISTFeeder()
+    if dataset == 'gaitnet':
         feeder = MNISTFeeder()
     else:
         feeder = MNISTFeeder()
@@ -162,9 +174,12 @@ def main(model_filename, data):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='plotting loss surface')
-    parser.add_argument('--model_name', '-m', default='examples/mnist_cnn.h5', type=str, help='path to .h5 file with model weights')
-    parser.add_argument('--train_data', '-t', default='mnist', help='tensors for the training data')
-    parser.add_argument('--test_data', '-r', help='tensors for the test dats')
+    parser.add_argument('--model_name', '-m', default='mnist_cnn.h5', type=str, help='path to .h5 file with model weights')
+    parser.add_argument('--dataset', '-d', default='mnist', help='name of the dataset being used \n( mnist | cifar10 | cifar100 | fashion_mnist | qmnist | padova | gaitnet )')
+    parser.add_argument('--train_data', '-x', default='X_padova_train.npy', help='path to tensors for the training data')
+    parser.add_argument('--train_labels', '-y', default='y_padova_train.npy', help='path to tensors for the training labels')
+    parser.add_argument('--test_data', '-v', default='X_padova_test.npy', help='path to tensors for the test data')
+    parser.add_argument('--test_labels', '-w', default='y_padova_test.npy', help='path to tensors for the test labels')
     args = parser.parse_args()
     
-    main(args.model_name, args.train_data)
+    main(args.model_name, args.dataset, args.train_data, args.train_labels, args.test_data, args.test_labels)
