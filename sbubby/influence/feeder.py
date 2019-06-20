@@ -18,15 +18,11 @@ from keras import backend as K
 
 """
 summary
-
 description
 
 :REQUIRES:
-
 :TODO:
-
 :AUTHOR: Matthew McAteer
-:ORGANIZATION: UnifyID
 :CONTACT: matthewmcateer0@gmail.com
 :SINCE: Sat Jun  8 14:43:35 2019
 :VERSION: 0.1
