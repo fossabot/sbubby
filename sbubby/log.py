@@ -6,25 +6,18 @@ from __future__ import print_function
 
 """
 summary
-
 description
 
 :REQUIRES:
-
 :TODO:
-
 :AUTHOR: Matthew McAteer
-:ORGANIZATION: UnifyID
-:CONTACT: natthew@unify.id
-:SINCE: Sat Jun  8 14:43:35 2019
+:SINCE: Sat Jun 8 14:43:35 2019
 :VERSION: 0.1
 """
 # =============================================================================
 # PROGRAM METADATA
 # =============================================================================
 __author__ = 'Matthew McAteer'
-__contact__ = 'matthewmcateer0@gmail.com'
-__copyright__ = 'UnifyID'
 __license__ = ''
 __date__ = 'Sat Jun  8 14:43:35 2019'
 __version__ = '0.1'
