@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from __future__ import division
@@ -80,8 +79,8 @@ def _timing(f):
 class Influence:
     """ Influence Class (for keras models)
     """
-    def __init__(self, feeder, model):
-        self.workspace = './influence-workspace'
+    def __init__(self, feeder, model, workspace='./influence-workspace', trainable_variables=None):
+        self.workspace = workspace
         self.feeder = feeder
         self.x_placeholder = model.input
         self.y_placeholder = K.placeholder(shape=model.output.shape)
@@ -94,8 +93,11 @@ class Influence:
         else:
             loss_op_train = model.loss(self.y_placeholder, model.output)
             loss_op_test = model.loss(self.y_placeholder, model.output)
-
-        trainable_variables = model.trainable_weights
+        
+        if trainable_variables:
+            trainable_variables = trainable_variables
+        else:
+            trainable_variables = model.trainable_weights
 
         self.loss_op_train = loss_op_train
         self.grad_op_train = K.gradients(loss_op_train, trainable_variables)
