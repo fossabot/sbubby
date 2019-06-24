@@ -47,7 +47,7 @@ from functools import wraps
 
 import sbubby
 from sbubby.influence.feeder import (MNISTFeeder, InfluenceFeeder,
-                                     CIFAR10Feeder, CIFAR100Feeder,
+                                     CIFAR10Feeder,
                                      FashionMNISTFeeder, CustomFeeder)
 from sbubby.influence.influence import Influence
 from sbubby.influence.plotter import (plot_unranked_influence,
