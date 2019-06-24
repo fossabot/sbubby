@@ -11,6 +11,11 @@ Data feeders for influence detection (including random mislabels).
 Contains built-in classes for mnist, cifar10, cifar100, and fashion_mnist
 
 :REQUIRES: keras, tensorflow, numpy, abc, six
+:TODO:
+
+Add IMDB Movie reviews (for example on tabular data)
+Add Reuters newswire topics (for example on NLP data)
+
 :AUTHOR: Matthew McAteer
 :CONTACT: matthewmcateer0@gmail.com
 :SINCE: Sat Jun 8 14:43:35 2019
@@ -45,8 +50,8 @@ _mnist_classes = ('zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
                   'eight', 'nine')
 _cifar10_classes = ('airplane', 'automobile', 'bird', 'cat', 'deer', 'dog',
                     'frog','horse','ship','truck')
-#_cifar100_classes = ('airplane', 'automobile', 'bird', 'cat', 'deer', 'dog',
-#                    'frog','horse','ship','truck')
+_cifar100_classes = ('airplane', 'automobile', 'bird', 'cat', 'deer', 'dog',
+                    'frog','horse','ship','truck')
 _fmnist_classes = ('T-shirt', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal',
                    'Shirt', 'Sneaker', 'Bag', 'Ankle boot')
 
@@ -240,6 +245,75 @@ class QMNISTFeeder(InfluenceFeeder):
     def reset(self):
         self.train_batch_offset = 0
 
+
+class KMNISTFeeder(InfluenceFeeder):
+    """Taken directly from https://github.com/rois-codh/kmnist/blob/master/download_data.py"""
+    def __init__(self, mislabel=False, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
+        train_data = np.load('http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-train-imgs.npz')
+        train_label = np.load('http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-train-labels.npz')
+        test_data = np.load('http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-test-imgs.npz')
+        test_label = np.load('http://codh.rois.ac.jp/kmnist/dataset/kmnist/kmnist-test-labels.npz')
+        num_classes = 10
+        # input image dimensions
+        img_rows, img_cols = 28, 28
+        self.train_origin_data = train_data
+        if mislabel==True:
+            train_label = self.make_mislabel(train_label, 
+                                             target_class_idx=7,
+                                             true_class_idx=5,
+                                             mislabel_rate=0.01)
+            self.train_origin_label = train_label
+        else:
+            self.train_origin_label = train_label
+
+        # load test data
+        self.test_origin_data = test_data
+        self.test_origin_label = test_label
+
+        if K.image_data_format() == 'channels_first':
+            self.train_data = train_data.reshape(train_data.shape[0], 1, img_rows, img_cols).astype('float32')/255
+            self.test_data = test_data.reshape(test_data.shape[0], 1, img_rows, img_cols).astype('float32')/255
+        else:
+            self.train_data = train_data.reshape(train_data.shape[0], img_rows, img_cols, 1).astype('float32')/255
+            self.test_data = test_data.reshape(test_data.shape[0], img_rows, img_cols, 1).astype('float32')/255
+
+        self.train_label = keras.utils.to_categorical(train_label, num_classes)
+        self.test_label = keras.utils.to_categorical(test_label, num_classes)
+
+        self.train_batch_offset = 0
+
+    def make_mislabel(self, label, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
+        """Take a random `mislabel_rate` of the `true_class_idx` and change it to `target_class_idx`"""
+        correct_indices = np.where(label == target_class_idx)[0]       
+        self.correct_indices = correct_indices[:]
+        labeled_true = np.where(label == true_class_idx)[0]
+        np.random.shuffle(labeled_true)
+        mislabel_indices = labeled_true[:int(labeled_true.shape[0] * mislabel_rate)]
+        label[mislabel_indices] = float(target_class_idx)
+        self.mislabel_indices = mislabel_indices
+
+        print('target class: {}'.format(_mnist_classes[target_class_idx]))
+        print(self.mislabel_indices)
+        return label
+
+    def test_indices(self, indices):
+        return self.test_data[indices], self.test_label[indices]
+
+    def train_batch(self, batch_size):
+        # calculate offset
+        start = self.train_batch_offset
+        end = start + batch_size
+        self.train_batch_offset += batch_size
+
+        return self.train_data[start:end, ...], self.train_label[start:end, ...]
+
+    def train_one(self, idx):
+        return self.train_data[idx, ...], self.train_label[idx, ...]
+
+    def reset(self):
+        self.train_batch_offset = 0
+
+
 class CIFAR10Feeder(InfluenceFeeder):
     def __init__(self, mislabel=False, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
         from keras.datasets import cifar10
@@ -303,65 +377,65 @@ class CIFAR10Feeder(InfluenceFeeder):
     def reset(self):
         self.train_batch_offset = 0
 
-#class CIFAR100Feeder(InfluenceFeeder):
-#    def __init__(self, mislabel=False, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
-#        from keras.datasets import cifar100
-#        (train_data, train_label), (test_data, test_label) = cifar100.load_data() 
-#        num_classes = 10
-#        # input image dimensions
-#        img_rows, img_cols = 32, 32
-#        self.train_origin_data = train_data
-#        if mislabel == True:
-#            train_label = self.make_mislabel(train_label)
-#            self.train_origin_label = train_label
-#        else:
-#            self.train_origin_label = train_label
-#        # load test data
-#        self.test_origin_data = test_data
-#        self.test_origin_label = test_label
-#        
-#        if K.image_data_format() == 'channels_first':
-#            self.train_data = train_data.reshape(train_data.shape[0], 1, img_rows, img_cols).astype('float32')/255
-#            self.test_data = test_data.reshape(test_data.shape[0], 1, img_rows, img_cols).astype('float32')/255
-#        else:
-#            self.train_data = train_data.reshape(train_data.shape[0], img_rows, img_cols, 1).astype('float32')/255
-#            self.test_data = test_data.reshape(test_data.shape[0], img_rows, img_cols, 1).astype('float32')/255
-#        
-#        self.train_label = keras.utils.to_categorical(train_label, num_classes)
-#        self.test_label = keras.utils.to_categorical(test_label, num_classes)
-#        
-#        self.train_batch_offset = 0
-#
-#    def make_mislabel(self, label, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
-#        """Take a random `mislabel_rate` of the `true_class_idx` and change it to `target_class_idx`"""
-#        correct_indices = np.where(label == target_class_idx)[0]       
-#        self.correct_indices = correct_indices[:]
-#        labeled_true = np.where(label == true_class_idx)[0]
-#        np.random.shuffle(labeled_true)
-#        mislabel_indices = labeled_true[:int(labeled_true.shape[0] * mislabel_rate)]
-#        label[mislabel_indices] = float(target_class_idx)
-#        self.mislabel_indices = mislabel_indices
-#
-#        print('target class: {}'.format(_cifar100_classes[target_class_idx]))
-#        print(self.mislabel_indices)
-#        return label
-#
-#    def test_indices(self, indices):
-#        return self.test_data[indices], self.test_label[indices]
-#
-#    def train_batch(self, batch_size):
-#        # calculate offset
-#        start = self.train_batch_offset
-#        end = start + batch_size
-#        self.train_batch_offset += batch_size
-#
-#        return self.train_data[start:end, ...], self.train_label[start:end, ...]
-#
-#    def train_one(self, idx):
-#        return self.train_data[idx, ...], self.train_label[idx, ...]
-#
-#    def reset(self):
-#        self.train_batch_offset = 0
+class CIFAR100Feeder(InfluenceFeeder):
+    def __init__(self, mislabel=False, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
+        from keras.datasets import cifar100
+        (train_data, train_label), (test_data, test_label) = cifar100.load_data() 
+        num_classes = 10
+        # input image dimensions
+        img_rows, img_cols = 32, 32
+        self.train_origin_data = train_data
+        if mislabel == True:
+            train_label = self.make_mislabel(train_label)
+            self.train_origin_label = train_label
+        else:
+            self.train_origin_label = train_label
+        # load test data
+        self.test_origin_data = test_data
+        self.test_origin_label = test_label
+        
+        if K.image_data_format() == 'channels_first':
+            self.train_data = train_data.reshape(train_data.shape[0], 1, img_rows, img_cols).astype('float32')/255
+            self.test_data = test_data.reshape(test_data.shape[0], 1, img_rows, img_cols).astype('float32')/255
+        else:
+            self.train_data = train_data.reshape(train_data.shape[0], img_rows, img_cols, 1).astype('float32')/255
+            self.test_data = test_data.reshape(test_data.shape[0], img_rows, img_cols, 1).astype('float32')/255
+        
+        self.train_label = keras.utils.to_categorical(train_label, num_classes)
+        self.test_label = keras.utils.to_categorical(test_label, num_classes)
+        
+        self.train_batch_offset = 0
+
+    def make_mislabel(self, label, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
+        """Take a random `mislabel_rate` of the `true_class_idx` and change it to `target_class_idx`"""
+        correct_indices = np.where(label == target_class_idx)[0]       
+        self.correct_indices = correct_indices[:]
+        labeled_true = np.where(label == true_class_idx)[0]
+        np.random.shuffle(labeled_true)
+        mislabel_indices = labeled_true[:int(labeled_true.shape[0] * mislabel_rate)]
+        label[mislabel_indices] = float(target_class_idx)
+        self.mislabel_indices = mislabel_indices
+
+        print('target class: {}'.format(_cifar100_classes[target_class_idx]))
+        print(self.mislabel_indices)
+        return label
+
+    def test_indices(self, indices):
+        return self.test_data[indices], self.test_label[indices]
+
+    def train_batch(self, batch_size):
+        # calculate offset
+        start = self.train_batch_offset
+        end = start + batch_size
+        self.train_batch_offset += batch_size
+
+        return self.train_data[start:end, ...], self.train_label[start:end, ...]
+
+    def train_one(self, idx):
+        return self.train_data[idx, ...], self.train_label[idx, ...]
+
+    def reset(self):
+        self.train_batch_offset = 0
 
 
 class FashionMNISTFeeder(InfluenceFeeder):
@@ -426,6 +500,137 @@ class FashionMNISTFeeder(InfluenceFeeder):
 
     def reset(self):
         self.train_batch_offset = 0
+
+
+class IMDBFeeder(InfluenceFeeder):
+    def __init__(self, mislabel=False, target_class_idx=0, true_class_idx=1, mislabel_rate=0.01):
+        from keras.datasets import imdb
+        (train_data, train_label), (test_data, test_label) = imdb.load_data(path="imdb.npz",
+                                                                            num_words=None,
+                                                                            skip_top=0,
+                                                                            maxlen=None,
+                                                                            seed=113,
+                                                                            start_char=1,
+                                                                            oov_char=2,
+                                                                            index_from=3)
+        num_classes = 2
+
+        self.train_origin_data = train_data
+        if mislabel==True:
+            train_label = self.make_mislabel(train_label, 
+                                             target_class_idx=0,
+                                             true_class_idx=1,
+                                             mislabel_rate=0.01)
+            self.train_origin_label = train_label
+        else:
+            self.train_origin_label = train_label
+
+        # load test data
+        self.test_origin_data = test_data
+        self.test_origin_label = test_label
+
+        self.train_label = keras.utils.to_categorical(train_label, num_classes)
+        self.test_label = keras.utils.to_categorical(test_label, num_classes)
+
+        self.train_batch_offset = 0
+
+    def make_mislabel(self, label, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
+        """Take a random `mislabel_rate` of the `true_class_idx` and change it to `target_class_idx`"""
+        correct_indices = np.where(label == target_class_idx)[0]       
+        self.correct_indices = correct_indices[:]
+        labeled_true = np.where(label == true_class_idx)[0]
+        np.random.shuffle(labeled_true)
+        mislabel_indices = labeled_true[:int(labeled_true.shape[0] * mislabel_rate)]
+        label[mislabel_indices] = float(target_class_idx)
+        self.mislabel_indices = mislabel_indices
+
+        print('target class: {}'.format(_mnist_classes[target_class_idx]))
+        print(self.mislabel_indices)
+        return label
+
+    def test_indices(self, indices):
+        return self.test_data[indices], self.test_label[indices]
+
+    def train_batch(self, batch_size):
+        # calculate offset
+        start = self.train_batch_offset
+        end = start + batch_size
+        self.train_batch_offset += batch_size
+
+        return self.train_data[start:end, ...], self.train_label[start:end, ...]
+
+    def train_one(self, idx):
+        return self.train_data[idx, ...], self.train_label[idx, ...]
+
+    def reset(self):
+        self.train_batch_offset = 0
+
+
+class ReutersFeeder(InfluenceFeeder):
+    def __init__(self, mislabel=False, target_class_idx=0, true_class_idx=1, mislabel_rate=0.01):
+        from keras.datasets import reuters
+
+        (train_data, train_label), (test_data, test_label) = reuters.load_data(path="reuters.npz",
+                                                                               num_words=None,
+                                                                               skip_top=0,
+                                                                               maxlen=None,
+                                                                               test_split=0.2,
+                                                                               seed=113,
+                                                                               start_char=1,
+                                                                               oov_char=2,
+                                                                               index_from=3)
+        num_classes = 46
+
+        self.train_origin_data = train_data
+        if mislabel==True:
+            train_label = self.make_mislabel(train_label, 
+                                             target_class_idx=0,
+                                             true_class_idx=1,
+                                             mislabel_rate=0.01)
+            self.train_origin_label = train_label
+        else:
+            self.train_origin_label = train_label
+
+        # load test data
+        self.test_origin_data = test_data
+        self.test_origin_label = test_label
+
+        self.train_label = keras.utils.to_categorical(train_label, num_classes)
+        self.test_label = keras.utils.to_categorical(test_label, num_classes)
+
+        self.train_batch_offset = 0
+
+    def make_mislabel(self, label, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
+        """Take a random `mislabel_rate` of the `true_class_idx` and change it to `target_class_idx`"""
+        correct_indices = np.where(label == target_class_idx)[0]       
+        self.correct_indices = correct_indices[:]
+        labeled_true = np.where(label == true_class_idx)[0]
+        np.random.shuffle(labeled_true)
+        mislabel_indices = labeled_true[:int(labeled_true.shape[0] * mislabel_rate)]
+        label[mislabel_indices] = float(target_class_idx)
+        self.mislabel_indices = mislabel_indices
+
+        print('target class: {}'.format(_mnist_classes[target_class_idx]))
+        print(self.mislabel_indices)
+        return label
+
+    def test_indices(self, indices):
+        return self.test_data[indices], self.test_label[indices]
+
+    def train_batch(self, batch_size):
+        # calculate offset
+        start = self.train_batch_offset
+        end = start + batch_size
+        self.train_batch_offset += batch_size
+
+        return self.train_data[start:end, ...], self.train_label[start:end, ...]
+
+    def train_one(self, idx):
+        return self.train_data[idx, ...], self.train_label[idx, ...]
+
+    def reset(self):
+        self.train_batch_offset = 0
+
 
 class CustomFeeder(InfluenceFeeder):
     def __init__(self, input_train_data, input_train_label, input_test_data,
