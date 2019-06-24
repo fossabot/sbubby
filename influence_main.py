@@ -112,6 +112,7 @@ def main(model_filename='mnist_cnn.h5', dataset='mnist',
         num_classes = train_labels.max()+1
         feeder = CustomFeeder(train_data, train_labels, test_data,
                               test_labels, num_classes)
+    print(feeder)
 
     inspector = Influence(
         feeder=feeder,
