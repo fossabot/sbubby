@@ -100,11 +100,11 @@ def main(model_filename='mnist_cnn.h5', dataset='mnist',
         feeder = MNISTFeeder()
     if dataset == 'cifar10':
         feeder = CIFAR10Feeder()
-    if dataset == 'cifar100':
-        feeder = CIFAR100Feeder()
+    #if dataset == 'cifar100':
+    #    feeder = CIFAR100Feeder()
     if dataset == 'fashion_mnist':
         feeder = FashionMNISTFeeder()
-    else:
+    if dataset not in ['mnist', 'cifar10', 'fashion_mnist']:
         train_data = np.load(train_data_path)
         train_labels = np.load(train_labels_path)
         test_data = np.load(test_data_path)
