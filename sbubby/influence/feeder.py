@@ -170,9 +170,6 @@ class MNISTFeeder(InfluenceFeeder):
 
     def reset(self):
         self.train_batch_offset = 0
-        train_data = np.load(train_data_path)
-        train_labels = np.load(train_labels_path)
-        test_data = np.load(test_data_path)
 
 
 class QMNISTFeeder(InfluenceFeeder):
