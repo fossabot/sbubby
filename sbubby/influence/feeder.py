@@ -170,6 +170,78 @@ class MNISTFeeder(InfluenceFeeder):
 
     def reset(self):
         self.train_batch_offset = 0
+        train_data = np.load(train_data_path)
+        train_labels = np.load(train_labels_path)
+        test_data = np.load(test_data_path)
+
+
+class QMNISTFeeder(InfluenceFeeder):
+    def __init__(self, mislabel=False, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
+
+
+        train_data = np.load('qmnist_x_train.npy')
+        train_label = np.load('qmnist_y_train.npy')
+        test_data = np.load('qmnist_x_test.npy')
+        test_label = np.load('qmnist_y_test.npy')
+        num_classes = 10
+        # input image dimensions
+        img_rows, img_cols = 28, 28
+        self.train_origin_data = train_data
+        if mislabel==True:
+            train_label = self.make_mislabel(train_label, 
+                                             target_class_idx=7,
+                                             true_class_idx=5,
+                                             mislabel_rate=0.01)
+            self.train_origin_label = train_label
+        else:
+            self.train_origin_label = train_label
+
+        # load test data
+        self.test_origin_data = test_data
+        self.test_origin_label = test_label
+
+        if K.image_data_format() == 'channels_first':
+            self.train_data = train_data.reshape(train_data.shape[0], 1, img_rows, img_cols).astype('float32')/255
+            self.test_data = test_data.reshape(test_data.shape[0], 1, img_rows, img_cols).astype('float32')/255
+        else:
+            self.train_data = train_data.reshape(train_data.shape[0], img_rows, img_cols, 1).astype('float32')/255
+            self.test_data = test_data.reshape(test_data.shape[0], img_rows, img_cols, 1).astype('float32')/255
+
+        self.train_label = keras.utils.to_categorical(train_label, num_classes)
+        self.test_label = keras.utils.to_categorical(test_label, num_classes)
+
+        self.train_batch_offset = 0
+
+    def make_mislabel(self, label, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
+        """Take a random `mislabel_rate` of the `true_class_idx` and change it to `target_class_idx`"""
+        correct_indices = np.where(label == target_class_idx)[0]       
+        self.correct_indices = correct_indices[:]
+        labeled_true = np.where(label == true_class_idx)[0]
+        np.random.shuffle(labeled_true)
+        mislabel_indices = labeled_true[:int(labeled_true.shape[0] * mislabel_rate)]
+        label[mislabel_indices] = float(target_class_idx)
+        self.mislabel_indices = mislabel_indices
+
+        print('target class: {}'.format(_mnist_classes[target_class_idx]))
+        print(self.mislabel_indices)
+        return label
+
+    def test_indices(self, indices):
+        return self.test_data[indices], self.test_label[indices]
+
+    def train_batch(self, batch_size):
+        # calculate offset
+        start = self.train_batch_offset
+        end = start + batch_size
+        self.train_batch_offset += batch_size
+
+        return self.train_data[start:end, ...], self.train_label[start:end, ...]
+
+    def train_one(self, idx):
+        return self.train_data[idx, ...], self.train_label[idx, ...]
+
+    def reset(self):
+        self.train_batch_offset = 0
 
 class CIFAR10Feeder(InfluenceFeeder):
     def __init__(self, mislabel=False, target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):

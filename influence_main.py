@@ -47,7 +47,7 @@ from functools import wraps
 
 import sbubby
 from sbubby.influence.feeder import (MNISTFeeder, InfluenceFeeder,
-                                     CIFAR10Feeder,
+                                     CIFAR10Feeder, QMNISTFeeder,
                                      FashionMNISTFeeder, CustomFeeder)
 from sbubby.influence.influence import Influence
 from sbubby.influence.plotter import (plot_unranked_influence,
@@ -98,13 +98,13 @@ def main(model_filename='mnist_cnn.h5', dataset='mnist',
     model = load_model(model_filename)
     if dataset == 'mnist':
         feeder = MNISTFeeder()
-    if dataset == 'cifar10':
+    elif dataset == 'cifar10':
         feeder = CIFAR10Feeder()
-    #if dataset == 'cifar100':
+    #elif dataset == 'cifar100':
     #    feeder = CIFAR100Feeder()
-    if dataset == 'fashion_mnist':
+    elif dataset == 'fashion_mnist':
         feeder = FashionMNISTFeeder()
-    if dataset not in ['mnist', 'cifar10', 'fashion_mnist']:
+    else:
         train_data = np.load(train_data_path)
         train_labels = np.load(train_labels_path)
         test_data = np.load(test_data_path)
