@@ -115,7 +115,7 @@ class MNISTFeeder(InfluenceFeeder):
         # input image dimensions
         img_rows, img_cols = 28, 28
         self.train_origin_data = train_data
-        if mislabel=True:
+        if mislabel==True:
             train_label = self.make_mislabel(train_label, 
                                              target_class_idx=7,
                                              true_class_idx=5,
@@ -179,7 +179,7 @@ class CIFAR10Feeder(InfluenceFeeder):
         # input image dimensions
         img_rows, img_cols = 32, 32
         self.train_origin_data = train_data
-        if mislabel=True:
+        if mislabel == True:
             train_label = self.make_mislabel(train_label, 
                                              target_class_idx=7,
                                              true_class_idx=5,
@@ -242,7 +242,7 @@ class CIFAR10Feeder(InfluenceFeeder):
 #        # input image dimensions
 #        img_rows, img_cols = 32, 32
 #        self.train_origin_data = train_data
-#        if mislabel=True:
+#        if mislabel == True:
 #            train_label = self.make_mislabel(train_label)
 #            self.train_origin_label = train_label
 #        else:
@@ -303,7 +303,7 @@ class FashionMNISTFeeder(InfluenceFeeder):
         # input image dimensions
         img_rows, img_cols = 28, 28
         self.train_origin_data = train_data
-        if mislabel=True:
+        if mislabel == True:
             train_label = self.make_mislabel(train_label,
                                              target_class_idx=7,
                                              true_class_idx=5,
@@ -363,7 +363,7 @@ class CustomFeeder(InfluenceFeeder):
                  input_test_label, num_classes, mislabel=False,
                  target_class_idx=7, true_class_idx=5, mislabel_rate=0.01):
         self.train_origin_data = input_train_data
-        if mislabel=True:
+        if mislabel == True:
             input_train_label = self.make_mislabel(input_train_label, 
                                                    target_class_idx=7,
                                                    true_class_idx=5,
