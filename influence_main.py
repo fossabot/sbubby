@@ -216,21 +216,20 @@ def main(model_filename='mnist_cnn.h5', dataset='mnist',
             '{}_influence_results_{}.csv'.format(model_filename,
                                                  finishing_time))
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='plotting loss surface')
     # Model and dataset details
     parser.add_argument('--model_name', '-n', default='mnist_cnn.h5', type=str,
                         help='path to .h5 file with model weights')
     parser.add_argument('--dataset', '-t', default='mnist',
-                        help='name of the dataset being used \n( mnist | cifar10 | cifar100 | fashion_mnist | qmnist | padova | gaitnet )')
-    parser.add_argument('--train_data', '-x', default='X_padova_train.npy',
+                        help='name of the dataset being used \n( mnist | cifar10 | cifar100 | fashion_mnist | qmnist )')
+    parser.add_argument('--train_data', '-x', default='qmnist_x_train.npy',
                         help='path to tensors for the training data')
-    parser.add_argument('--train_labels', '-y', default='y_padova_train.npy',
+    parser.add_argument('--train_labels', '-y', default='qmnist_y_train.npy',
                         help='path to tensors for the training labels')
-    parser.add_argument('--test_data', '-v', default='X_padova_test.npy',
+    parser.add_argument('--test_data', '-v', default='qmnist_x_test.npy',
                         help='path to tensors for the test data')
-    parser.add_argument('--test_labels', '-w', default='y_padova_test.npy',
+    parser.add_argument('--test_labels', '-w', default='qmnist_y_test.npy',
                         help='path to tensors for the test labels')
     # Influence Training parameters
     parser.add_argument('--all_test', '-a', default='all',
@@ -257,7 +256,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    main(model_filename=args.model_name, dataset=args.dataset,
+    main(model_filename=args.model_name,
+         dataset=args.dataset,
          train_data_path=args.train_data,
          train_labels_path=args.train_labels,
          test_data_path=args.test_data,
