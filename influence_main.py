@@ -7,7 +7,6 @@ from __future__ import unicode_literals
 Influence Function Class
 Re-implementation of Koh et al., 2018.
 :REQUIRES:
-:TODO:
 :AUTHOR: Matthew McAteer
 :CONTACT: matthewmcateer0@gmail.com
 :SINCE: Sat Jun  8 14:43:35 2019

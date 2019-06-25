@@ -11,11 +11,6 @@ Data feeders for influence detection (including random mislabels).
 Contains built-in classes for mnist, cifar10, cifar100, and fashion_mnist
 
 :REQUIRES: keras, tensorflow, numpy, abc, six
-:TODO:
-
-Add IMDB Movie reviews (for example on tabular data)
-Add Reuters newswire topics (for example on NLP data)
-
 :AUTHOR: Matthew McAteer
 :CONTACT: matthewmcateer0@gmail.com
 :SINCE: Sat Jun 8 14:43:35 2019
