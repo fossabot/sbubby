@@ -31,7 +31,7 @@ __version__ = '0.1'
 # IMPORT STATEMENTS
 # =============================================================================
 from .feeder import InfluenceFeeder  # noqa: ignore=F401
-from .loss_proxies import InfluenceFeeder  # noqa: ignore=F401
+from .loss_proxies import sparse_softmax_cross_entropy_with_logits
 from ..log import logger
 
 import numpy as np
