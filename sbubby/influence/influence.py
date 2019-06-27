@@ -55,7 +55,8 @@ _using_fully_tf = True
 
 kerasLossDict = {
     'categorical_crossentropy': keras.losses.categorical_crossentropy,
-    'sparse_categorical_crossentropy': keras.losses.sparse_categorical_crossentropy,
+    #'sparse_categorical_crossentropy': keras.losses.sparse_categorical_crossentropy,
+    'sparse_categorical_crossentropy': sparse_softmax_cross_entropy_with_logits,
     'binary_crossentropy': keras.losses.binary_crossentropy,
     'kullback_leibler_divergence': keras.losses.kullback_leibler_divergence,
     'poisson': keras.losses.poisson,
