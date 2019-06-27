@@ -5,7 +5,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 from __future__ import unicode_literals
 """
-Hessian vector product calculations
+Replacements for loss functions so they are twice-differentiable
 Adapted from the TF Repo
 :AUTHOR: Matthew McAteer
 :CONTACT: matthewmcateer0@gmail.com
