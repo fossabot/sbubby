@@ -236,11 +236,11 @@ if __name__ == '__main__':
                         help='whether influence calculations should be run on all the test data (if set to `all`, it will run influence calculations across the entire test dataset)')
     parser.add_argument('--query_indices', '-i', default=99,
                         help='the indexes of the test data for the influence function to be run on (if `all_test` is set to `all`, this will be ignored)')
-    parser.add_argument('--testset_batch_size', '-b', default=100, type=float,
+    parser.add_argument('--testset_batch_size', '-b', default=100, type=int,
                         help='batch size for the test data')
-    parser.add_argument('--train_batch_size', '-k', default=100, type=float,
+    parser.add_argument('--train_batch_size', '-k', default=100, type=int,
                         help='batch size for the influence detector (should be equal to the batch sized used in the original model training')
-    parser.add_argument('--train_iterations', '-l', default=600, type=float,
+    parser.add_argument('--train_iterations', '-l', default=600, type=int,
                         help='The number of iterations (should be equal to the train data length divided by the batch size)')
     # Influence detector parameters
     parser.add_argument('--scale', '-s', default=1e5, type=float,
@@ -249,7 +249,7 @@ if __name__ == '__main__':
                         help='Damping factor for models with non-convexities in their loss landscape')
     parser.add_argument('--num_repeats', '-m', default=1, type=int,
                         help='Number of repeats of the influence calculation (more repeats will result in a closer approximation of the true influence scores, but will take longer)')
-    parser.add_argument('--recursion_batch_size', '-r', default=100, type=float,
+    parser.add_argument('--recursion_batch_size', '-r', default=100, type=int,
                         help='Influence recursion batch size')
     parser.add_argument('--recursion_depth', '-p', default=10000, type=float,
                         help='Influence recursion depth')
