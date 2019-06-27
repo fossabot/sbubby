@@ -221,15 +221,15 @@ if __name__ == '__main__':
     # Model and dataset details
     parser.add_argument('--model_name', '-n', default='mnist_cnn.h5', type=str,
                         help='path to .h5 file with model weights')
-    parser.add_argument('--dataset', '-t', default='mnist',
+    parser.add_argument('--dataset', '-t', default='mnist', type=str,
                         help='name of the dataset being used \n( mnist | cifar10 | cifar100 | fashion_mnist | qmnist )')
-    parser.add_argument('--train_data', '-x', default='qmnist_x_train.npy',
+    parser.add_argument('--train_data', '-x', default='qmnist_x_train.npy', type=str,
                         help='path to tensors for the training data')
-    parser.add_argument('--train_labels', '-y', default='qmnist_y_train.npy',
+    parser.add_argument('--train_labels', '-y', default='qmnist_y_train.npy', type=str,
                         help='path to tensors for the training labels')
-    parser.add_argument('--test_data', '-v', default='qmnist_x_test.npy',
+    parser.add_argument('--test_data', '-v', default='qmnist_x_test.npy', type=str,
                         help='path to tensors for the test data')
-    parser.add_argument('--test_labels', '-w', default='qmnist_y_test.npy',
+    parser.add_argument('--test_labels', '-w', default='qmnist_y_test.npy', type=str,
                         help='path to tensors for the test labels')
     # Influence Training parameters
     parser.add_argument('--all_test', '-a', default='all',
@@ -251,7 +251,7 @@ if __name__ == '__main__':
                         help='Number of repeats of the influence calculation (more repeats will result in a closer approximation of the true influence scores, but will take longer)')
     parser.add_argument('--recursion_batch_size', '-r', default=100, type=int,
                         help='Influence recursion batch size')
-    parser.add_argument('--recursion_depth', '-p', default=10000, type=float,
+    parser.add_argument('--recursion_depth', '-p', default=10000, type=int,
                         help='Influence recursion depth')
 
     args = parser.parse_args()
