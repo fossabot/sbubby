@@ -31,6 +31,7 @@ __version__ = '0.1'
 # IMPORT STATEMENTS
 # =============================================================================
 from .feeder import InfluenceFeeder  # noqa: ignore=F401
+from .loss_proxies import InfluenceFeeder  # noqa: ignore=F401
 from ..log import logger
 
 import numpy as np
@@ -58,7 +59,8 @@ kerasLossDict = {
     'binary_crossentropy': keras.losses.binary_crossentropy,
     'kullback_leibler_divergence': keras.losses.kullback_leibler_divergence,
     'poisson': keras.losses.poisson,
-    'cosine_proximity': keras.losses.cosine_proximity
+    'cosine_proximity': keras.losses.cosine_proximity,
+    'sparse_softmax_cross_entropy_with_logits': sparse_softmax_cross_entropy_with_logits
 }
 
 # =============================================================================
@@ -87,7 +89,10 @@ class Influence:
         self.test_feed_options = dict()
         self.train_feed_options = dict()
         
-        if model.loss in kerasLossDict.keys():
+        if model.loss == 'sparse_softmax_cross_entropy_with_logits':
+            loss_op_train = kerasLossDict['sparse_softmax_cross_entropy_with_logits'](self.y_placeholder, model.output)
+            loss_op_test = kerasLossDict['sparse_softmax_cross_entropy_with_logits'](self.y_placeholder, model.output)
+        elif model.loss in kerasLossDict.keys():
             loss_op_train = kerasLossDict[model.loss](self.y_placeholder, model.output)
             loss_op_test = kerasLossDict[model.loss](self.y_placeholder, model.output)
         else:
