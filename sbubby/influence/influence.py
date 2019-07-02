@@ -90,18 +90,13 @@ class Influence:
         self.test_feed_options = dict()
         self.train_feed_options = dict()
         
-        # If the model loss is a function, make sure it's differentiable
-        if hasattr(model.loss, __name__):
-            if model.loss__name__ == 'sparse_softmax_cross_entropy_with_logits':
-                loss_op_train = kerasLossDict['sparse_softmax_cross_entropy_with_logits'](self.y_placeholder, model.output)
-                loss_op_test = kerasLossDict['sparse_softmax_cross_entropy_with_logits'](self.y_placeholder, model.output)
-            else:
-                loss_op_train = model.loss(self.y_placeholder, model.output)
-                loss_op_test = model.loss(self.y_placeholder, model.output)
         # If the model is a string, make sure it referrs to a Keras loss function.
-        elif model.loss in kerasLossDict.keys():
+        if model.loss in kerasLossDict.keys():
             loss_op_train = kerasLossDict[model.loss](self.y_placeholder, model.output)
             loss_op_test = kerasLossDict[model.loss](self.y_placeholder, model.output)
+        else:
+            loss_op_train = model.loss(self.y_placeholder, model.output)
+            loss_op_test = model.loss(self.y_placeholder, model.output)
         
         if trainable_variables:
             trainable_variables = trainable_variables
