@@ -296,6 +296,10 @@ if __name__ == '__main__':
     parser.add_argument('--split_idx', default=0, type=int, help='the index of data splits for the dataloader')
     parser.add_argument('--trainloader', default='', help='path to the dataloader with random labels')
     parser.add_argument('--testloader', default='', help='path to the testloader with random labels')
+    parser.add_argument('--data_train', default='', help='path to training data')
+    parser.add_argument('--data_test', default='', help='path to test data')
+    parser.add_argument('--label_train', default='', help='path to training labels')
+    parser.add_argument('--label_test', default='', help='path to test labels')
 
     # model parameters
     parser.add_argument('--model', default='resnet56', help='model name')
@@ -429,27 +433,11 @@ if __name__ == '__main__':
         y_train = keras.utils.to_categorical(y_train, num_classes)
         y_test = keras.utils.to_categorical(y_test, num_classes)
 
-    elif rank == 0 and args.dataset == 'ginger3':
-        # These are the in-memory representations of the training and test datasets
-        x_train, y_train = get_data('train')
-        x_test,  y_test  = get_data('test')
-        x_train = x_train / 255
-        x_test  = x_test / 255
-
-        # Encode labels to hot vectors (ex : 2 -> [0,0,1,0,0,0,0,0,0,0])
-        y_train = keras.utils.to_categorical(y_train, num_classes = 3)
-        y_test  = keras.utils.to_categorical(y_test, num_classes = 3)
-
-    elif rank == 0 and args.dataset == 'padova':
-        x_train = np.load('X_1_1k_train.py')
-        x_test = np.load('X_1_1k_train.py')
-        y_train = np.load('y_1_1k_test.py')
-        y_test = np.load('y_1_1k_test.py')
-    elif rank == 0 and args.dataset == 'gaitnet':
-        x_train = np.load('X_1_1k_train.py')
-        x_test = np.load('X_1_1k_train.py')
-        y_train = np.load('y_1_1k_test.py')
-        y_test = np.load('y_1_1k_test.py')
+    else:
+        x_train = np.load(args.data_train)
+        x_test = np.load(args.data_test)
+        y_train = np.load(args.label_train)
+        y_test = np.load(args.label_test)
         
     trainloader = {'x': x_train, 'y': y_train}
 
