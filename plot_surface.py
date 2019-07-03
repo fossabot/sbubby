@@ -296,10 +296,10 @@ if __name__ == '__main__':
     parser.add_argument('--split_idx', default=0, type=int, help='the index of data splits for the dataloader')
     parser.add_argument('--trainloader', default='', help='path to the dataloader with random labels')
     parser.add_argument('--testloader', default='', help='path to the testloader with random labels')
-    parser.add_argument('--data_train', default='', help='path to training data')
-    parser.add_argument('--data_test', default='', help='path to test data')
-    parser.add_argument('--label_train', default='', help='path to training labels')
-    parser.add_argument('--label_test', default='', help='path to test labels')
+    parser.add_argument('--data_train', default='', type=str, help='path to training data')
+    parser.add_argument('--data_test', default='', type=str, help='path to test data')
+    parser.add_argument('--label_train', default='', type=str, help='path to training labels')
+    parser.add_argument('--label_test', default='', type=str, help='path to test labels')
 
     # model parameters
     parser.add_argument('--model', default='resnet56', help='model name')
